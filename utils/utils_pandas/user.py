@@ -16,9 +16,11 @@ def check_password(user: DataFrame, password: str) -> bool:
 
 def change_token(user: DataFrame):
     user_index = df[df['email'] == user['email'].values[0]].index[0]
-    df.at[user_index, "token"] = random_token_generator()
+    token = random_token_generator()
+    df.at[user_index, "token"] = token
     df.at[user_index, "token_creation_time"] = datetime.now()
     df.to_csv('./data/user.csv', index=False)
+    return token
 
 def insert_user(email: str, password: str, token: str, token_time: datetime):
     new_entry = {
@@ -29,7 +31,7 @@ def insert_user(email: str, password: str, token: str, token_time: datetime):
         'token_creation_time': token_time
     }
     global df
-    df = df.append(new_entry, ignore_index=True)
+    df = df._append(new_entry, ignore_index=True)
     df.to_csv('./data/user.csv', index=False)
 
 def check_token_expiration(user: DataFrame, input_token: str, expire_minutes: int) -> bool:
