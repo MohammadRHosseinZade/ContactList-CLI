@@ -16,12 +16,18 @@ def check_password(user: DataFrame, password: str) -> bool:
 
 def change_token(user: DataFrame):
     user_index = df[df['email'] == user['email'].values[0]].index[0]
-    df.at[user_index, "token"] = random_token_generator(size=8)
+    df.at[user_index, "token"] = random_token_generator()
     df.at[user_index, "token_creation_time"] = datetime.now()
     df.to_csv('./data/user.csv', index=False)
 
 def insert_user(email: str, password: str, token: str, token_time: datetime):
-    new_entry = {'email': email, 'password': password, 'token': token, 'token_creation_time': token_time}
+    new_entry = {
+        'id': df['id'].max() + 1 if not df.empty else 1,
+        'email': email,
+        'password': password,
+        'token': token,
+        'token_creation_time': token_time
+    }
     global df
     df = df.append(new_entry, ignore_index=True)
     df.to_csv('./data/user.csv', index=False)
@@ -30,5 +36,6 @@ def check_token_expiration(user: DataFrame, input_token: str, expire_minutes: in
     if input_token == user['token'].values[0]:
         token_creation_time = pd.to_datetime(user['token_creation_time'].values[0])
         expiration_time = token_creation_time + timedelta(minutes=expire_minutes)
-        return datetime.now() > expiration_time
+        if not datetime.now() > expiration_time:
+            return user['id'].values[0]
     return False

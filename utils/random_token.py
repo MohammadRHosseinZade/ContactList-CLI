@@ -1,6 +1,4 @@
-import random
-import string
+import uuid
 
-
-def random_token_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+def random_token_generator():
+    return uuid.uuid4().hex
