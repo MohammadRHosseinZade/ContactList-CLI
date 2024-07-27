@@ -7,8 +7,8 @@ from utils.utils_pandas.user import search_user, check_password, change_token
 def login(email, password):
     if email and password:
         user = search_user(email=email)
-        if user  == None:
-            print('Account does not exist or password is incorrect')
+        if user.empty:
+            print('Account does not exist or password is incorrectt')
         else:
             is_password_correct=check_password(user = user, password = password)
             if is_password_correct:
