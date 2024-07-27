@@ -2,7 +2,7 @@ import click
 import pandas as pd
 from utils.utils_pandas.user import check_token_expiration
 from utils.utils_pandas.contact import insert_phone_number, insert_contact_info
-df = pd.read_csv('./data/user.csv')
+
 
 @click.command()
 @click.option('--token')
@@ -10,10 +10,11 @@ df = pd.read_csv('./data/user.csv')
 @click.option('--phone_number')
 @click.option('--description')
 def add_contact(token, full_name,phone_number, description):
+    df = pd.read_csv('./data/user.csv')
     if token and full_name and phone_number:
         entry_exists = df[df['token'] == token]
         if not entry_exists.empty:
-           validated = check_token_expiration(user= entry_exists, input_token=token, expire_minutes=300)
+           validated = check_token_expiration(user= entry_exists, input_token=token, expire_minutes=3)
            if validated == False:
                print('Your token is expired')
            else:

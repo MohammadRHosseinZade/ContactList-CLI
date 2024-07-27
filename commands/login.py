@@ -1,6 +1,7 @@
 import click
-import pandas as pd
 from utils.utils_pandas.user import search_user, check_password, change_token
+
+
 @click.command()
 @click.option('--email')
 @click.option('--password')

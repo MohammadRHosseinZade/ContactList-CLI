@@ -21,9 +21,3 @@ def sign_up(email, password):
             print("Account already exists")    
     else:
         print(f'Email and password are required')
-
-
-def check_existance(email):
-    csv_file_path = "./data/user.csv"
-    df = pd.read_csv(csv_file_path)
-    pass
